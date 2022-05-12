@@ -252,3 +252,32 @@ val imagesDF = spark.read.format("image").load(imageDir)
 imagesDF.printSchema
 imagesDF.select("image.height", "image.width", "image.nChannels", "image.mode",
  "label").show(5, false)
+
+// COMMAND ----------
+
+val path = "/databricks-datasets/learning-spark-v2/cctvVideos/train_images/"
+val binaryFilesDF = spark.read.format("binaryFile")
+ .option("pathGlobFilter", "*.jpg")
+ .load(path)
+binaryFilesDF.show(5)
+
+// COMMAND ----------
+
+val binaryFilesDF = spark.read.format("binaryFile")
+ .option("pathGlobFilter", "*.jpg")
+ .option("recursiveFileLookup", "true")
+ .load(path)
+binaryFilesDF.show(5)
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC GlobalTempView vs TempView
+
+// COMMAND ----------
+
+// GlobalTempView: Crea o reemplaza una vista temporal global usando el nombre dado.
+// La vida útil de esta vista temporal está vinculada a esta aplicación Spark.
+
+// TempView: Crea o reemplaza una vista temporal local con este DataFrame.
+// La duración de esta tabla temporal está vinculada a la SparkSession que se usó para crear este DataFrame.
